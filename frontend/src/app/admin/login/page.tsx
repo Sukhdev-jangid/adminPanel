@@ -7,22 +7,13 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { toast } from 'sonner';
-import axios from '../utils/axios';
+import axios from '../../utils/axios';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-  
-    useEffect(() => {
-      const token = localStorage.getItem('adminToken')
-      if (token) {
-    router.push('/admin')
-      }
-     
-    }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +23,7 @@ export default function LoginPage() {
       const res = await axios.post('/auth/login', { email, password });
       const token = res.data.token;
       localStorage.setItem('adminToken', token);
-      router.push('/admin');
+      router.replace('/admin');
       toast.success('Login successful!');
     } catch (err) {
       toast.error('Login failed!');

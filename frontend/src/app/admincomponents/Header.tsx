@@ -57,7 +57,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken')
-    router.push('/login')
+    router.replace("/admin/login");
   }
 
   return (
