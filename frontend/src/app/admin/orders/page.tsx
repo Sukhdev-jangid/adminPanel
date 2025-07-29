@@ -12,6 +12,8 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 // types/order.ts
 export interface IOrder {
@@ -111,6 +113,7 @@ const tempOrders: IOrder[] = [
 export default function OrdersPage() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // Simulate loading delay
@@ -126,61 +129,71 @@ export default function OrdersPage() {
 
       <Card className="overflow-x-auto py-0">
         <Table>
-          <TableHeader className="bg-[#F9FAFB]">
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>User</TableHead>
-              <TableHead>Courses</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Discount</TableHead>
-              <TableHead>Final</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Coupon</TableHead>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Payment</TableHead>
-            </TableRow>
-          </TableHeader>
+         <TableHeader className="bg-[#F9FAFB]">
+  <TableRow>
+    <TableHead>#</TableHead>
+    <TableHead>User</TableHead>
+    <TableHead>Courses</TableHead>
+    <TableHead>Total</TableHead>
+    <TableHead>Discount</TableHead>
+    <TableHead>Final</TableHead>
+    <TableHead>Status</TableHead>
+    <TableHead>Coupon</TableHead>
+    <TableHead>Order ID</TableHead>
+    <TableHead>Payment</TableHead>
+    <TableHead>Actions</TableHead> {/* ✅ New Column */}
+  </TableRow>
+</TableHeader>
 
-          <TableBody>
-            {loading
-              ? [...Array(3)].map((_, i) => (
-                  <TableRow key={i}>
-                    {[...Array(10)].map((_, j) => (
-                      <TableCell key={j}>
-                        <Skeleton className="h-4 w-full" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              : orders.map((order, index) => (
-                  <TableRow key={order._id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{order.user?.name}</TableCell>
-                    <TableCell>{order.courses.length}</TableCell>
-                    <TableCell>₹{order.total}</TableCell>
-                    <TableCell>₹{order.discount}</TableCell>
-                    <TableCell>₹{order.finalTotal}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          order.status === "completed"
-                            ? "complete"
-                            : order.status === "failed"
-                            ? "destructive"
-                            : "secondary"
-                        }
-                      >
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{order.coupon?.code || "—"}</TableCell>
-                    <TableCell>{order.orderId}</TableCell>
-                    <TableCell>
-                      {order.cashfreePaymentStatus || "N/A"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
+<TableBody>
+  {loading
+    ? [...Array(3)].map((_, i) => (
+        <TableRow key={i}>
+          {[...Array(11)].map((_, j) => ( // 10 -> 11
+            <TableCell key={j}>
+              <Skeleton className="h-4 w-full" />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))
+    : orders.map((order, index) => (
+        <TableRow key={order._id}>
+          <TableCell>{index + 1}</TableCell>
+          <TableCell>{order.user?.name}</TableCell>
+          <TableCell>{order.courses.length}</TableCell>
+          <TableCell>₹{order.total}</TableCell>
+          <TableCell>₹{order.discount}</TableCell>
+          <TableCell>₹{order.finalTotal}</TableCell>
+          <TableCell>
+            <Badge
+              variant={
+                order.status === "completed"
+                  ? "complete"
+                  : order.status === "failed"
+                  ? "destructive"
+                  : "secondary"
+              }
+            >
+              {order.status}
+            </Badge>
+          </TableCell>
+          <TableCell>{order.coupon?.code || "—"}</TableCell>
+          <TableCell>{order.orderId}</TableCell>
+          <TableCell>{order.cashfreePaymentStatus || "N/A"}</TableCell>
+          <TableCell>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() =>
+                router.push(`/admin/orders/${order._id}`)
+              }
+            >
+              View
+            </Button>
+          </TableCell>
+        </TableRow>
+      ))}
+</TableBody>
         </Table>
       </Card>
     </div>
