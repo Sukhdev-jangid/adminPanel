@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import Image from "next/image";
-import axios from "axios";
+import axios from "../../utils/axios";
+import { Card, CardContent } from "@/components/ui/card";
+import { UploadCloud, Rocket } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function AddCoursePage() {
+export default function CreateCoursePage() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -21,155 +22,121 @@ export default function AddCoursePage() {
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [previewURL, setPreviewURL] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? target.checked : value,
+    });
   };
 
-  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setThumbnail(file);
-      setPreview(URL.createObjectURL(file));
+      setPreviewURL(URL.createObjectURL(file));
     }
-  };
-
-  const handleSwitchChange = (value: boolean) => {
-    setFormData({ ...formData, published: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) =>
-      data.append(key, value.toString())
-    );
-    if (thumbnail) {
-      data.append("thumbnail", thumbnail);
-    }
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("price", formData.price);
+    data.append("instructor", formData.instructor);
+    data.append("category", formData.category);
+    data.append("published", String(formData.published));
+    if (thumbnail) data.append("thumbnail", thumbnail);
 
     try {
-      await axios.post("http://localhost:8000/api/course/create", data);
-      toast.success("Course created successfully!");
-    } catch (error) {
-      toast.error("Something went wrong.");
-      console.error(error);
+      const res = await axios.post(`/course/create`, data);
+      console.log(res.data);
+      toast.success('Course created successfully! Redirecting...')
+
+      setTimeout(() => {
+        router.push("/admin/courses");
+      }, 2500);
+    } catch (err) {
+      console.error("Error:", err);
+      toast.error('Failed to create course! Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen py-10 px-4">
-      <h1>Add New Course</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white w-full max-w-3xl rounded-xl shadow-md p-8 space-y-6"
-      >
-        {/* Upload Thumbnail */}
-        <div className="space-y-2">
-          <Label className="block text-sm font-medium">Upload thumbnail</Label>
-          <div className="border border-dashed rounded-md p-4 w-20 h-20 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
-            <Input type="file" onChange={handleThumbnailChange} className="hidden" id="thumbnail" />
-            <label htmlFor="thumbnail" className="flex flex-col items-center justify-center w-full h-full text-gray-500">
-              {preview ? (
-                <Image
-                  src={preview}
-                  alt="Preview"
-                  width={150}
-                  height={150}
-                  className="rounded-md object-cover"
-                />
-              ) : (
-                <>
-                  <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M12 12v9m0-9l-3 3m3-3l3 3M12 3v9"></path>
-                  </svg>
-                  <span className="text-sm">Upload</span>
-                </>
-              )}
-            </label>
-          </div>
-        </div>
+    <div className="flex justify-center items-center">
+      <Card className="w-full max-w-2xl shadow-xl border rounded-2xl bg-white">
+        <CardContent className="p-6 space-y-6">
+          <h2 className="text-3xl font-bold text-center flex items-center justify-center gap-2">
+            <span role="img" aria-label="book">📘</span> Create New Course
+          </h2>
 
-        {/* Title */}
-        <div>
-          <Label htmlFor="title">Course Title</Label>
-          <Input
-            id="title"
-            name="title"
-            placeholder="Type here"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label className="font-semibold">Title</Label>
+              <Input name="title" value={formData.title} onChange={handleChange} placeholder="Enter course title" />
+            </div>
 
-        {/* Instructor */}
-        <div>
-          <Label htmlFor="instructor">Instructor Name</Label>
-          <Input
-            id="instructor"
-            name="instructor"
-            placeholder="Type here"
-            value={formData.instructor}
-            onChange={handleChange}
-            required
-          />
-        </div>
+            <div>
+              <Label className="font-semibold">Description</Label>
+              <Textarea name="description" value={formData.description} onChange={handleChange} placeholder="Course description..." />
+            </div>
 
-        {/* Price */}
-        <div>
-          <Label htmlFor="price">Price</Label>
-          <Input
-            id="price"
-            name="price"
-            placeholder="Type here"
-            value={formData.price}
-            onChange={handleChange}
-            type="number"
-            required
-          />
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label className="font-semibold">Price</Label>
+                <Input name="price" type="number" value={formData.price} onChange={handleChange} placeholder="₹999" />
+              </div>
+              <div>
+                <Label className="font-semibold">Instructor</Label>
+                <Input name="instructor" value={formData.instructor} onChange={handleChange} placeholder="Instructor name" />
+              </div>
+              <div>
+                <Label className="font-semibold">Category</Label>
+                <Input name="category" value={formData.category} onChange={handleChange} placeholder="e.g. Marketing" />
+              </div>
+            </div>
 
-        {/* Category */}
-        <div>
-          <Label htmlFor="category">Category</Label>
-          <Input
-            id="category"
-            name="category"
-            placeholder="Type here"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          />
-        </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" name="published" checked={formData.published} onChange={handleChange} />
+              <Label className="font-medium">Publish this course</Label>
+            </div>
 
-        {/* Description */}
-        <div>
-          <Label htmlFor="description">Course Description</Label>
-          <Textarea
-            id="description"
-            name="description"
-            rows={6}
-            placeholder="Type here"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
+            <div>
+              <Label className="font-semibold mb-2 block">Thumbnail</Label>
+              <div className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-gray-50 transition">
+                {!previewURL ? (
+                  <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
+                    <UploadCloud size={32} />
+                    <p>Click to upload thumbnail</p>
+                  </div>
+                ) : (
+                  <img
+                    src={previewURL}
+                    alt="Thumbnail Preview"
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                )}
+                <Input type="file" onChange={handleFileChange} className="mt-2" />
+              </div>
+            </div>
 
-        {/* Published Toggle */}
-        <div className="flex items-center gap-3">
-          <Label>Publish</Label>
-          <Switch checked={formData.published} onCheckedChange={handleSwitchChange} />
-        </div>
-
-        {/* Submit */}
-        <Button type="submit" variant={"blue"} size={"full"}>
-          Create Course
-        </Button>
-      </form>
+            <Button
+              type="submit"
+              variant={"blue"}
+              size={"full"}
+            >
+              <Rocket size={18} /> Create Course
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

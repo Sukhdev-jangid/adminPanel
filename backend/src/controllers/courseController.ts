@@ -7,6 +7,7 @@ export const createCourse = async (req: express.Request, res: express.Response) 
     try {
         const {title,description,price,instructor,category,published} = req.body;
         const thumbnailPath = req.file ? req.file.path : undefined;
+        console.log(title, description, price, instructor, category, published, thumbnailPath);     
         const newCourse = await Course.create({
             title,
             description,

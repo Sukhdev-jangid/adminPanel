@@ -39,8 +39,7 @@ export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
+  const fetchCourses = async () => {
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}course/allCourses`
@@ -54,6 +53,7 @@ export default function AdminCoursesPage() {
       }
     };
 
+  useEffect(() => {  
     fetchCourses();
   }, []);
 
@@ -70,6 +70,7 @@ export default function AdminCoursesPage() {
     if (res.status === 200) {
       toast.success("Course deleted successfully!");
       // Optionally: refresh course list
+      await fetchCourses();
     } else {
       toast.error("Failed to delete course.");
     }

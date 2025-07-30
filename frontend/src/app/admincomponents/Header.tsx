@@ -61,7 +61,7 @@ export default function Header() {
   }
 
   return (
-    <header className="w-full px-4 sm:px-10 border-b py-3 flex items-center justify-between bg-white  relative z-50">
+    <header className="h-[10vh] w-full px-4 sm:px-10 border-b py-3 flex items-center justify-between bg-white  relative z-50">
       {/* Left: Logo + Brand */}
       <div className="flex items-center space-x-3">
         <Image
