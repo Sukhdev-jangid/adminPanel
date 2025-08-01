@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Users } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 // types/User.ts
 export interface IUser {
@@ -21,55 +22,63 @@ export interface IUser {
   email: string;
   role: "user" | "admin";
   createdAt: string;
-  mobile?: string;
+  phone?: string;
 }
 
 // Temporary data with mobile numbers
-const tempUsers: IUser[] = [
-  {
-    _id: "1",
-    name: "Sunil Soni",
-    email: "sunil@example.com",
-    role: "admin",
-    createdAt: "2024-01-10T08:30:00Z",
-    mobile: "9876543210",
-  },
-  {
-    _id: "2",
-    name: "Sukhdev Jangid",
-    email: "sukhdev@example.com",
-    role: "user",
-    createdAt: "2024-02-12T10:45:00Z",
-    mobile: "9123456789",
-  },
-  {
-    _id: "3",
-    name: "Anjali Meena",
-    email: "anjali@example.com",
-    role: "user",
-    createdAt: "2024-03-20T12:00:00Z",
-    mobile: "9012345678",
-  },
-  {
-    _id: "4",
-    name: "Rahul Sharma",
-    email: "rahul@example.com",
-    role: "admin",
-    createdAt: "2024-04-05T14:20:00Z",
-    mobile: "9000000000",
-  },
-];
+// const tempUsers: IUser[] = [
+//   {
+//     _id: "1",
+//     name: "Sunil Soni",
+//     email: "sunil@example.com",
+//     role: "admin",
+//     createdAt: "2024-01-10T08:30:00Z",
+//     phone: "9876543210",
+//   },
+//   {
+//     _id: "2",
+//     name: "Sukhdev Jangid",
+//     email: "sukhdev@example.com",
+//     role: "user",
+//     createdAt: "2024-02-12T10:45:00Z",
+//     phone: "9123456789",
+//   },
+//   {
+//     _id: "3",
+//     name: "Anjali Meena",
+//     email: "anjali@example.com",
+//     role: "user",
+//     createdAt: "2024-03-20T12:00:00Z",
+//     phone: "9012345678",
+//   },
+//   {
+//     _id: "4",
+//     name: "Rahul Sharma",
+//     email: "rahul@example.com",
+//     role: "admin",
+//     createdAt: "2024-04-05T14:20:00Z",
+//     phone: "9000000000",
+//   },
+// ];
 
 export default function UsersPage() {
   const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const getUsers = async () => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/getAllUsers`);
+        setUsers(res.data.users); // Adjusted to match the response structure // response structure se match karaye
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
   useEffect(() => {
-    setTimeout(() => {
-      setUsers(tempUsers);
-      setLoading(false);
-    }, 1200);
+    getUsers();
   }, []);
 
   const handleDelete = (id: string) => {
@@ -81,7 +90,7 @@ export default function UsersPage() {
 
   return (
     <div className="p-4 md:p-6">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">All Users</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2"><Users className="w-7 h-7" /> All Users</h2>
 
       <div className="rounded-md border bg-white">
         <Table>
@@ -108,12 +117,12 @@ export default function UsersPage() {
                 </TableRow>
               ))
             ) : (
-              users.map((user, index) => (
+              Array.isArray(users) && users.map((user, index) => (
                 <TableRow key={user._id}>
                   <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.mobile || "N/A"}</TableCell>
+                  <TableCell>{user.phone || "N/A"}</TableCell>
                   <TableCell>
                     <Badge variant={user.role === "admin" ? "destructive" : "secondary"}>
                       {user.role}

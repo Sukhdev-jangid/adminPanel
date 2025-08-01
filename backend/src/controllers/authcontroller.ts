@@ -5,7 +5,7 @@ import User from "../models/userModel";
 
 export const signup = async (req: Request, res: Response) => {
     try {
-        const { name, email, password,role  } = req.body;
+        const { name, email,phone, password,role  } = req.body;
 
         //check user already exits
         const exitingUser = await User.findOne({ email });
@@ -18,6 +18,7 @@ export const signup = async (req: Request, res: Response) => {
         const user = await User.create({
             name,
             email,
+            phone,
             password: hashedPassword,
             role: role || 'user' // default role is 'user'
         });
@@ -33,6 +34,7 @@ export const signup = async (req: Request, res: Response) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                phone: user.phone,
                 role:user.role
             },
             token

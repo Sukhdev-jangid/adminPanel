@@ -7,6 +7,7 @@ export interface ICourse extends Document {
     instructor:string;
     category: string;
     thumbnail?: string;
+    video?: string;
     published: boolean;
 }
 
@@ -32,6 +33,10 @@ const courseSchema = new Schema<ICourse>({
         required: true,
     },
     thumbnail: {
+        type: String,
+        default: "",
+    },
+    video: {
         type: String,
         default: "",
     },

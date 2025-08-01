@@ -14,6 +14,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { ReceiptText } from "lucide-react";
 
 // types/order.ts
 export interface IOrder {
@@ -41,6 +42,7 @@ export interface IOrder {
   cashfreePaymentStatus?: string;
   cashfreePaymentSessionId?: string;
   cashfreePaymentInfo?: any;
+  createdAt: string;
 }
 
 
@@ -67,7 +69,8 @@ const tempOrders: IOrder[] = [
     cashfreeOrderId: "CF12345",
     cashfreePaymentStatus: "PAID",
     cashfreePaymentSessionId: "SESSION123",
-    cashfreePaymentInfo: { method: "UPI", referenceId: "UPI12345" }
+    cashfreePaymentInfo: { method: "UPI", referenceId: "UPI12345" },
+    createdAt: "2025-07-31T10:00:00.000Z"
   },
   {
     _id: "order2",
@@ -86,7 +89,8 @@ const tempOrders: IOrder[] = [
     cashfreeOrderId: "",
     cashfreePaymentStatus: "",
     cashfreePaymentSessionId: "",
-    cashfreePaymentInfo: {}
+    cashfreePaymentInfo: {},
+    createdAt: "2025-07-31T10:00:00.000Z"
   },
   {
     _id: "order3",
@@ -106,7 +110,8 @@ const tempOrders: IOrder[] = [
     cashfreeOrderId: "CF54321",
     cashfreePaymentStatus: "FAILED",
     cashfreePaymentSessionId: "SESSION654",
-    cashfreePaymentInfo: { method: "Card", reason: "Insufficient Funds" }
+    cashfreePaymentInfo: { method: "Card", reason: "Insufficient Funds" },
+    createdAt: "2025-07-31T10:00:00.000Z"
   }
 ];
 
@@ -125,7 +130,7 @@ export default function OrdersPage() {
 
   return (
     <div className="p-5">
-      <h2 className="text-2xl font-semibold mb-4">All Orders</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2"><ReceiptText className="w-7 h-7" /> All Orders</h2>
 
       <Card className="overflow-x-auto py-0">
         <Table>
@@ -141,6 +146,7 @@ export default function OrdersPage() {
     <TableHead>Coupon</TableHead>
     <TableHead>Order ID</TableHead>
     <TableHead>Payment</TableHead>
+    <TableHead>Date</TableHead>
     <TableHead>Actions</TableHead> {/* ✅ New Column */}
   </TableRow>
 </TableHeader>
@@ -180,6 +186,13 @@ export default function OrdersPage() {
           <TableCell>{order.coupon?.code || "—"}</TableCell>
           <TableCell>{order.orderId}</TableCell>
           <TableCell>{order.cashfreePaymentStatus || "N/A"}</TableCell>
+          <TableCell>
+            {new Date(order.createdAt).toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric"
+            })}
+           </TableCell> 
           <TableCell>
             <Button
               size="sm"

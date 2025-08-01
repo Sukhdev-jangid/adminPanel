@@ -1,13 +1,26 @@
 import express from 'express';
 import Course from '../models/courseModel';
+import { count } from 'console';
 
 // Controller to create a new course only admin can create course
 
 export const createCourse = async (req: express.Request, res: express.Response) => {
     try {
-        const {title,description,price,instructor,category,published} = req.body;
-        const thumbnailPath = req.file ? req.file.path : undefined;
-        console.log(title, description, price, instructor, category, published, thumbnailPath);     
+        const { title, description, price, instructor, category, published } = req.body;
+        const files = req.files as {
+            [fieldname: string]: Express.Multer.File[];
+        };
+
+        const thumbnailFile = files?.thumbnail?.[0];
+        const videoFile = files?.video?.[0];
+
+        const thumbnailPath = thumbnailFile?.path || "";
+        const videoPath = videoFile?.path || "";
+
+        console.log("thumbnail:", thumbnailPath);
+        console.log("video:", videoPath);
+
+        console.log(title, description, price, instructor, category, published, thumbnailPath);
         const newCourse = await Course.create({
             title,
             description,
@@ -15,7 +28,8 @@ export const createCourse = async (req: express.Request, res: express.Response) 
             instructor,
             category,
             published,
-            thumbnail:thumbnailPath
+            thumbnail: thumbnailPath,
+            video: videoPath
         });
 
         res.status(201).json({ message: "Course created successfully", newCourse });
@@ -28,7 +42,11 @@ export const createCourse = async (req: express.Request, res: express.Response) 
 export const getAllCourses = async (req: express.Request, res: express.Response) => {
     try {
         const courses = await Course.find({});
-        res.status(200).json(courses);
+        res.status(200).json({
+            success: true,
+            message: "Courses fetched successfully",    
+            count: courses.length,
+            courses});
     } catch (error) {
         res.status(500).json({ message: "Error fetching courses" });
     }
@@ -53,12 +71,12 @@ export const updateCourseById = async (req: express.Request, res: express.Respon
         const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
-        }   
+        }
         res.status(200).json({ message: "Course updated successfully", course });
-    } catch (error) { 
+    } catch (error) {
         res.status(500).json({ message: "Error updating course" });
     }
-}    
+}
 
 //detete course by id only admin can delete course
 export const deleteCourseById = async (req: express.Request, res: express.Response) => {

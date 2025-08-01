@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "../../utils/axios";
 import { Card, CardContent } from "@/components/ui/card";
-import { UploadCloud, Rocket } from "lucide-react";
+import { UploadCloud, Rocket, Video } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +22,7 @@ export default function CreateCoursePage() {
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [video, setVideo] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const router = useRouter();
 
@@ -35,11 +36,18 @@ export default function CreateCoursePage() {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setThumbnail(file);
       setPreviewURL(URL.createObjectURL(file));
+    }
+  };
+
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setVideo(file);
     }
   };
 
@@ -54,18 +62,19 @@ export default function CreateCoursePage() {
     data.append("category", formData.category);
     data.append("published", String(formData.published));
     if (thumbnail) data.append("thumbnail", thumbnail);
+    if (video) data.append("video", video);
 
     try {
       const res = await axios.post(`/course/create`, data);
       console.log(res.data);
-      toast.success('Course created successfully! Redirecting...')
+      toast.success('Course created successfully! Redirecting...');
 
       setTimeout(() => {
         router.push("/admin/courses");
       }, 2500);
     } catch (err) {
       console.error("Error:", err);
-      toast.error('Failed to create course! Please try again.');
+      toast.error('Something went wrong! Please try again later.');
     }
   };
 
@@ -78,6 +87,7 @@ export default function CreateCoursePage() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Text Fields */}
             <div>
               <Label className="font-semibold">Title</Label>
               <Input name="title" value={formData.title} onChange={handleChange} placeholder="Enter course title" />
@@ -108,6 +118,7 @@ export default function CreateCoursePage() {
               <Label className="font-medium">Publish this course</Label>
             </div>
 
+            {/* Thumbnail Upload */}
             <div>
               <Label className="font-semibold mb-2 block">Thumbnail</Label>
               <div className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-gray-50 transition">
@@ -123,7 +134,22 @@ export default function CreateCoursePage() {
                     className="w-full h-48 object-cover rounded-lg"
                   />
                 )}
-                <Input type="file" onChange={handleFileChange} className="mt-2" />
+                <Input type="file" accept="image/*" onChange={handleThumbnailChange} className="mt-2" />
+              </div>
+            </div>
+
+            {/* ✅ Video Upload Section */}
+            <div>
+              <Label className="font-semibold mb-2 block">Course Video</Label>
+              <div className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-gray-50 transition">
+                <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
+                  <Video size={32} />
+                  <p>Upload video file (MP4)</p>
+                </div>
+                <Input type="file" accept="video/mp4" onChange={handleVideoChange} className="mt-2" />
+                {video && (
+                  <p className="text-sm text-gray-600 mt-2">Selected Video: {video.name}</p>
+                )}
               </div>
             </div>
 

@@ -51,37 +51,6 @@ export default function ProfilePage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Account Info */}
-      <Card className="shadow-sm">
-        <CardHeader>
-          <CardTitle>Account Info</CardTitle>
-        </CardHeader>
-        <Separator />
-        <CardContent className="space-y-3 pt-4">
-          <div className="text-sm">
-            <p className="font-semibold">Role</p>
-            <p>{user.role}</p>
-          </div>
-          <div className="text-sm">
-            <p className="font-semibold">Last Login</p>
-            <p>{new Date(user.lastLogin).toLocaleString()}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Activity Stats */}
-      <Card className="shadow-sm">
-        <CardHeader>
-          <CardTitle>Activity Stats</CardTitle>
-        </CardHeader>
-        <Separator />
-        <CardContent className="pt-4">
-          <p className="text-sm">
-            <span className="font-semibold">{user.coursesCreated}</span> courses created
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }

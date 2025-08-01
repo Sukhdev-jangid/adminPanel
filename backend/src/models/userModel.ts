@@ -4,6 +4,7 @@ export interface IUser extends Document {
     name : string;
     email : string;
     password:string;
+    phone:number;
     role:'user'|'admin';
     createdAt:Date;
 }
@@ -19,6 +20,11 @@ const userSchema:Schema = new Schema<IUser>({
         required:true,
         unique:true,
         lowercase:true,
+    },
+    phone:{
+        type:Number,
+        required:true,
+        length:10,
     },
     password:{
         type:String,

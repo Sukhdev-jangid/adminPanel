@@ -8,7 +8,10 @@ const router = express.Router();
 
 //admin routes for course management
 // Create a new course
-router.post('/create',upload.single('thumbnail'),protect,isAdmin,createCourse );
+router.post('/create',upload.fields([
+    { name: 'thumbnail', maxCount: 1 },
+    { name: 'video', maxCount: 1 },
+  ]),protect,isAdmin,createCourse );
 // Update course by ID
 router.put('/updateCourse/:id', protect, isAdmin, updateCourseById);
 //delete course by ID
