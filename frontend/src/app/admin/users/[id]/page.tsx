@@ -11,12 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function EditUserForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [role, setRole] = useState<"user" | "admin">("user");
+   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +29,16 @@ export default function EditUserForm() {
 
   return (
     <div className="max-w-xl mx-auto px-6 py-8 bg-white border border-gray-200 rounded-2xl shadow-sm">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-8">Edit User</h2>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => router.back()}
+        className="flex items-center gap-2"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </Button>
+      <h2 className="text-3xl font-semibold text-gray-800 my-4">Edit User</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Full Name */}
         <div className="grid gap-2">

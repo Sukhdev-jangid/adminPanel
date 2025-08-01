@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "../../utils/axios";
 import { Card, CardContent } from "@/components/ui/card";
-import { UploadCloud, Rocket, Video } from "lucide-react";
+import { UploadCloud, Rocket, Video, PlusSquare } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -79,13 +79,10 @@ export default function CreateCoursePage() {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="p-4 md:p-6">
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2"><PlusSquare className="w-7 h-7" /> Create New Course</h2>
       <Card className="w-full max-w-2xl shadow-xl border rounded-2xl bg-white">
         <CardContent className="p-6 space-y-6">
-          <h2 className="text-3xl font-bold text-center flex items-center justify-center gap-2">
-            <span role="img" aria-label="book">📘</span> Create New Course
-          </h2>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Text Fields */}
             <div>

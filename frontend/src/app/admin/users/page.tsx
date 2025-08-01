@@ -130,18 +130,23 @@ export default function UsersPage() {
                   </TableCell>
                   <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell className="text-right space-x-2">
-                    <Button variant="outline" size="sm" onClick={() =>router.push(`/admin/users/${user._id}`)}>
-                      <Pencil className="w-4 h-4 mr-1" />
-                      Edit
-                    </Button>
                     <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(user._id)}
-                    >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Delete
-                    </Button>
+                        variant="outline"
+                        size="icon"
+                        className="hover:bg-blue-100 text-blue-600 border-blue-200 transition"
+                        onClick={() => router.push(`/admin/users/${user._id}`)}
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="hover:bg-red-100 text-red-600 bg-transparent border border-red-300 transition"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                   </TableCell>
                 </TableRow>
               ))

@@ -6,10 +6,11 @@ import {
   Home,
   PlusCircle,
   ListChecks,
-  MessageSquare,
   UserCircle,
   Users,
   ShoppingCart,
+  Library,
+  PlusSquare,
 } from 'lucide-react'
 
 const navItems = [
@@ -26,6 +27,16 @@ const navItems = [
   {
     label: 'Add Course',
     href: '/admin/add-course',
+    icon: <PlusSquare className="w-5 h-5" />,
+  },
+   {
+    label: 'All E-Books',
+    href: '/admin/ebooks',
+    icon: <Library className="w-5 h-5" />,
+  },
+  {
+    label: 'Add E-Book',
+    href: '/admin/add-ebook',
     icon: <PlusCircle className="w-5 h-5" />,
   },
   {

@@ -14,6 +14,8 @@ import {
   ShoppingCart,
   Menu,
   X,
+  PlusSquare,
+  Library,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -32,6 +34,16 @@ const navItems = [
     label: 'Add Course',
     href: '/admin/add-course',
     icon: <PlusCircle className="w-5 h-5" />,
+  },
+  {
+    label: 'All E-Books',
+    href: '/admin/ebooks',
+    icon: <Library className="w-5 h-5" />,
+  },
+  {
+    label: 'Add E-Book',
+    href: '/admin/add-ebook',
+    icon: <PlusSquare className="w-5 h-5" />,
   },
   {
     label: 'All Users',

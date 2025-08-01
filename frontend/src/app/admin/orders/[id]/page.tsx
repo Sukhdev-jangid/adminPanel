@@ -1,4 +1,8 @@
+'use client';
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function OrderDetailsPage() {
   const order = {
@@ -24,9 +28,20 @@ export default function OrderDetailsPage() {
       },
     ],
   };
+   const router = useRouter();
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6 bg-white rounded-xl shadow-md">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => router.back()}
+        className="flex items-center gap-2"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </Button>
+      
       <h2 className="text-3xl font-bold border-b pb-2">🧾 Order Details</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

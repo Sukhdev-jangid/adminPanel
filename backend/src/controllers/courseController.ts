@@ -41,12 +41,13 @@ export const createCourse = async (req: express.Request, res: express.Response) 
 // get all courses
 export const getAllCourses = async (req: express.Request, res: express.Response) => {
     try {
-        const courses = await Course.find({});
+        const courses = await Course.find({}).sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
-            message: "Courses fetched successfully",    
+            message: "Courses fetched successfully",
             count: courses.length,
-            courses});
+            courses
+        });
     } catch (error) {
         res.status(500).json({ message: "Error fetching courses" });
     }

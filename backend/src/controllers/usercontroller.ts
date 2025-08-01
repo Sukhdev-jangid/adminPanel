@@ -5,7 +5,7 @@ import User from "../models/userModel";
 // Get all users
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const users = await User.find().select("-password");
+        const users = await User.find().select("-password").sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
             message: "Users fetched successfully",
