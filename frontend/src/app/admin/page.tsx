@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
-import { Users, BookOpen, ShoppingCart, LayoutDashboard } from "lucide-react";
+import { Users, BookOpen, ShoppingCart, LayoutDashboard, Book } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -36,15 +36,15 @@ export default function DashboardPage() {
       <h1 className="text-3xl font-bold mb-6 flex items-center gap-2"><LayoutDashboard className="w-7 h-7" /> Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Total Courses */}
+        {/* Total Orders */}
         <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-              <BookOpen className="w-6 h-6" />
+            <div className="p-3 rounded-full bg-purple-100 text-purple-600">
+              <ShoppingCart className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Courses</p>
-              <p className="text-2xl font-bold text-gray-800">{totalcourses}</p>
+              <p className="text-sm text-muted-foreground">Total Orders</p>
+              <p className="text-2xl font-bold text-gray-800">32</p>
             </div>
           </CardContent>
         </Card>
@@ -62,15 +62,28 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Total Orders */}
+        {/* Total Courses */}
         <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
           <CardContent className="p-5 flex items-center gap-4">
-            <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-              <ShoppingCart className="w-6 h-6" />
+            <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+              <BookOpen className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Orders</p>
-              <p className="text-2xl font-bold text-gray-800">32</p>
+              <p className="text-sm text-muted-foreground">Total Courses</p>
+              <p className="text-2xl font-bold text-gray-800">{totalcourses}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Total eBooks */}
+        <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+          <CardContent className="p-5 flex items-center gap-4">
+            <div className="p-3 rounded-full bg-blue-100 text-blue-600">
+              <Book className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Total eBooks</p>
+              <p className="text-2xl font-bold text-gray-800">6</p>
             </div>
           </CardContent>
         </Card>

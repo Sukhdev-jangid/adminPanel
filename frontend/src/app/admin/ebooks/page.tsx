@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, BookOpen} from 'lucide-react';
+import { ArrowRight, BookOpen, BookUser} from 'lucide-react';
 import { EbookCard } from '@/app/admincomponents/EbookCard';
 
 const dummyEbooks = [
@@ -39,15 +39,10 @@ export default function EbookListPage() {
   const [ebooks, setEbooks] = useState(dummyEbooks);
   const router = useRouter();
 
-  const handleDelete = (id: string) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this eBook?');
-    if (!confirmDelete) return;
-
-    const updated = ebooks.filter((ebook) => ebook._id !== id);
-    setEbooks(updated);
+  const handleDelete = (id: string) => {  
   };
 
-  const editEbook = () =>{
+  const editEbook = (id:string) =>{
 
   }
 
@@ -55,7 +50,7 @@ export default function EbookListPage() {
     <div className="p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h1 className="text-3xl font-bold flex items-center gap-2"><BookOpen className="w-7 h-7" />
+        <h1 className="text-3xl font-bold flex items-center gap-2"><BookUser className="w-7 h-7" />
          All eBooks</h1>
         <Button onClick={() => router.push("/admin/add-ebook")} variant={"blue"}>
           Add New eBook <ArrowRight className="ml-2 w-4 h-4" />

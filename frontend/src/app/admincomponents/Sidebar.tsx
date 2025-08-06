@@ -4,13 +4,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   Home,
-  PlusCircle,
   ListChecks,
   UserCircle,
   Users,
   ShoppingCart,
   Library,
   PlusSquare,
+  BookPlus,
 } from 'lucide-react'
 
 const navItems = [
@@ -37,7 +37,7 @@ const navItems = [
   {
     label: 'Add E-Book',
     href: '/admin/add-ebook',
-    icon: <PlusCircle className="w-5 h-5" />,
+    icon: <BookPlus className="w-5 h-5" />,
   },
   {
     label: 'All Users',
