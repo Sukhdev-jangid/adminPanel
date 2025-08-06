@@ -146,6 +146,7 @@ export default function OrdersPage() {
             <TableRow>
               <TableHead>#</TableHead>
               <TableHead>User</TableHead>
+              <TableHead>E-mail</TableHead>
               <TableHead>Courses</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Discount</TableHead>
@@ -153,7 +154,6 @@ export default function OrdersPage() {
               <TableHead>Status</TableHead>
               <TableHead>Coupon</TableHead>
               <TableHead>Order ID</TableHead>
-              <TableHead>Payment</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -163,9 +163,9 @@ export default function OrdersPage() {
             {loading
               ? [...Array(3)].map((_, i) => (
                   <TableRow key={i}>
-                    {[...Array(11)].map((_, j) => (
+                    {[...Array(12)].map((_, j) => (
                       <TableCell key={j}>
-                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4  w-full" />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -174,6 +174,7 @@ export default function OrdersPage() {
                   <TableRow key={order._id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{order.user?.name}</TableCell>
+                    <TableCell>{order.user?.email}</TableCell>
                     <TableCell>{order.courses.length}</TableCell>
                     <TableCell>₹{order.total}</TableCell>
                     <TableCell>₹{order.discount}</TableCell>
@@ -193,7 +194,6 @@ export default function OrdersPage() {
                     </TableCell>
                     <TableCell>{order.coupon?.code || "—"}</TableCell>
                     <TableCell>{order.orderId}</TableCell>
-                    <TableCell>{order.cashfreePaymentStatus || "N/A"}</TableCell>
                     <TableCell>
                       {new Date(order.createdAt).toLocaleDateString("en-IN", {
                         day: "2-digit",

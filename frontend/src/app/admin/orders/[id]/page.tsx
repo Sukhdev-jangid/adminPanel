@@ -62,7 +62,17 @@ export default function OrderDetailsPage() {
 
         <div>
           <p className="text-sm text-gray-500">Status</p>
-          <Badge variant="outline" className="capitalize">{order.status}</Badge>
+          <Badge
+          variant={
+          order.status === "completed"
+          ? "complete"
+          : order.status === "failed"
+          ? "destructive"
+          : "secondary"
+          }
+          >
+          {order.status}
+          </Badge>
         </div>
 
         <div>
