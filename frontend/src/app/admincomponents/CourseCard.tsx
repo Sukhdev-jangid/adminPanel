@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Pencil, Tag, Trash2, User } from "lucide-react";
+import { IndianRupee, Pencil, Tag, Trash2, User } from "lucide-react";
 import Image from 'next/image';
 import React from 'react'
 
@@ -40,12 +40,12 @@ interface CourseCardPops{
 
 export function CourseCard({course,onEdit,onDelete}:CourseCardPops) {
   return (
-    <Card
-                key={course._id}
-                className="p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 bg-white"
+    <div
+    key={course._id}
+    className="p-4 rounded-xl shadow-md hover:shadow-lg transition duration-200 border border-gray-200 bg-white"
               >
                 {/* Thumbnail */}
-                <div className="w-full h-44 rounded-lg overflow-hidden">
+                <div className="w-full aspect-square overflow-hidden rounded-md ">
                   <Image
                     src={`http://localhost:5000/${course.thumbnail}`}
                     alt={course.title}
@@ -56,18 +56,18 @@ export function CourseCard({course,onEdit,onDelete}:CourseCardPops) {
                 </div>
 
                 {/* Title & Description */}
-                <h2 className="text-xl font-semibold text-gray-800 line-clamp-1">
+                <h2 className="text-2xl font-semibold text-gray-800 line-clamp-1 my-2">
                   {course.title}
                 </h2>
-                <p className="text-sm text-gray-600  line-clamp-2">
+                <p className="texts-sm text-gray-600  line-clamp-2">
                   {course.description}
                 </p>
 
                 {/* Course Details */}
-                <div className="space-y-1 text-sm text-gray-700 ">
+                <div className="space-y-2 text-sm text-gray-700 my-2 ">
                   <div className="flex items-center gap-2">
                     <span className="text-blue-500">
-                      ₹
+                      <IndianRupee  className="w-4 h-4"/>
                     </span>
                     <span><strong>Price :</strong> {course.price} /-</span>
                   </div>
@@ -110,7 +110,7 @@ export function CourseCard({course,onEdit,onDelete}:CourseCardPops) {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center justify-between">
+                <div className="grid grid-cols-2 gap-2">
                   <Button
                     size="sm"
                     variant="outline"
@@ -149,7 +149,7 @@ export function CourseCard({course,onEdit,onDelete}:CourseCardPops) {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
-              </Card>
+    </div>
   )
 }
 

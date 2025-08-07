@@ -23,9 +23,9 @@ interface EbookCardProps {
 
 export function EbookCard({ ebook, onEdit, onDelete }: EbookCardProps) {
   return (
-    <div className=" rounded-xl  bg-white overflow-hidden shadow-md" key={ebook._id}>
+    <div className=" rounded-xl  bg-white overflow-hidden shadow-md p-4" key={ebook._id}>
              {/* Thumbnail */}
-          <div className="h-48 bg-gray-100 flex items-center justify-center">
+          <div className="w-full aspect-square overflow-hidden rounded-md ">
               {ebook.thumbnail ? (
                  <Image
                    src={ebook.thumbnail}
@@ -42,11 +42,11 @@ export function EbookCard({ ebook, onEdit, onDelete }: EbookCardProps) {
              </div>
 
              {/* Content */}
-             <CardContent className="p-4 space-y-2">
+             <div className=" space-y-2">
                <h3 className="text-lg font-semibold">{ebook.title}</h3>
 
                <div className="flex items-center text-sm text-muted-foreground">
-                 <User className="w-4 h-4 mr-1" />
+                 <User className="w-4 h-4" />
                  {ebook.author}
                </div>
 
@@ -67,7 +67,7 @@ export function EbookCard({ ebook, onEdit, onDelete }: EbookCardProps) {
                    rel="noopener noreferrer"
                    className="inline-flex items-center justify-center w-full border border-purple-700 text-purple-700 font-medium text-sm px-4 py-2 rounded-md hover:bg-purple-700 hover:text-white transition"
                  >
-                   <ExternalLink className="w-4 h-4 mr-2" />
+                   <ExternalLink className="w-4 h-4" />
                    View PDF
                  </a>
                )}
@@ -75,18 +75,19 @@ export function EbookCard({ ebook, onEdit, onDelete }: EbookCardProps) {
                {/* Edit + Delete Buttons */}
                <div className="grid grid-cols-2 gap-2 mt-3">
                  <Button
+                   onClick={()=>onEdit(ebook._id)}
                    variant="outline">
-                   <Edit className="w-4 h-4 mr-2" />
+                   <Edit className="w-4 h-4" />
                    Edit
                  </Button>
                  <Button
                    variant="destructive"
                  >
-                   <Trash2 className="w-4 h-4 mr-2" />
+                   <Trash2 className="w-4 h-4" />
                    Delete
                  </Button>
                </div>
-             </CardContent>
+             </div>
            </div>
   );
 }

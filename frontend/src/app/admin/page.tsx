@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const getUsers = async () => {
       try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}user/getAllUsers`);
-        setTotalUser(res.data.count); // Adjusted to match the response structure // response structure se match karaye
+        setTotalUser(res.data.count); 
       } catch (error) {
         console.error("Failed to fetch users:", error);
       }
@@ -21,7 +21,7 @@ export default function DashboardPage() {
   const getCourses = async () => {
       try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}course/allCourses`);
-        setTotalCourses(res.data.count); // Adjusted to match the response structure // response structure se match karaye
+        setTotalCourses(res.data.count); 
       } catch (error) {
         console.error("Failed to fetch courses:", error);
       }

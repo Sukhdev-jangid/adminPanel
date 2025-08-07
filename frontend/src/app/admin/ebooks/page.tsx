@@ -43,7 +43,7 @@ export default function EbookListPage() {
   };
 
   const editEbook = (id:string) =>{
-
+        router.push(`/admin/ebooks/${id}`);
   }
 
   return (
