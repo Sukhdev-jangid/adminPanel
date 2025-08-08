@@ -3,11 +3,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
 import { Users, BookOpen, ShoppingCart, LayoutDashboard, Book } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
   const [totaluser, setTotalUser] = useState(0);
   const [totalcourses, setTotalCourses] = useState(0);
+  const router = useRouter();
 
   
   const getUsers = async () => {
@@ -37,7 +39,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Total Orders */}
-        <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+        <Card onClick={()=>router.push('/admin/orders')} className="shadow-lg border border-gray-200 hover:shadow-xl transition cursor-pointer">
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-full bg-purple-100 text-purple-600">
               <ShoppingCart className="w-6 h-6" />
@@ -50,7 +52,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Total Users */}
-        <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+        <Card onClick={()=>router.push('/admin/users')} className="shadow-lg border border-gray-200 hover:shadow-xl transition cursor-pointer">
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-full bg-green-100 text-green-600">
               <Users className="w-6 h-6" />
@@ -63,7 +65,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Total Courses */}
-        <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+        <Card onClick={()=>router.push('/admin/courses')} className="shadow-lg border border-gray-200 hover:shadow-xl transition cursor-pointer">
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-full bg-blue-100 text-blue-600">
               <BookOpen className="w-6 h-6" />
@@ -76,7 +78,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Total eBooks */}
-        <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+        <Card onClick={()=>router.push('/admin/ebooks')} className="shadow-lg border border-gray-200 hover:shadow-xl transition cursor-pointer">
           <CardContent className="p-5 flex items-center gap-4">
             <div className="p-3 rounded-full bg-blue-100 text-blue-600">
               <Book className="w-6 h-6" />

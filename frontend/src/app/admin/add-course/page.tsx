@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "../../utils/axios";
-import { Card, CardContent } from "@/components/ui/card";
 import { UploadCloud, Rocket, Video, PlusSquare } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -22,7 +21,7 @@ export default function CreateCoursePage() {
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [video, setVideo] = useState<File | null>(null);
+ 
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const router = useRouter();
 
@@ -44,12 +43,7 @@ export default function CreateCoursePage() {
     }
   };
 
-  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setVideo(file);
-    }
-  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +56,7 @@ export default function CreateCoursePage() {
     data.append("category", formData.category);
     data.append("published", String(formData.published));
     if (thumbnail) data.append("thumbnail", thumbnail);
-    if (video) data.append("video", video);
+
 
     try {
       const res = await axios.post(`/course/create`, data);
@@ -81,44 +75,16 @@ export default function CreateCoursePage() {
   return (
     <div className="p-4 md:p-6">
       <h2 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2"><PlusSquare className="w-7 h-7" /> Create New Course</h2>
-      <Card className="w-full max-w-2xl shadow-xl border rounded-2xl bg-white">
-        <CardContent className="p-6 space-y-6">
+      <div className="w-full max-w-2xl shadow-xl border rounded-2xl bg-white">
+        <div className="p-6 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Text Fields */}
+           
             <div>
-              <Label className="font-semibold">Title</Label>
-              <Input name="title" value={formData.title} onChange={handleChange} placeholder="Enter course title" />
-            </div>
-
-            <div>
-              <Label className="font-semibold">Description</Label>
-              <Textarea name="description" value={formData.description} onChange={handleChange} placeholder="Course description..." />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <Label className="font-semibold">Price</Label>
-                <Input name="price" type="number" value={formData.price} onChange={handleChange} placeholder="₹999" />
-              </div>
-              <div>
-                <Label className="font-semibold">Instructor</Label>
-                <Input name="instructor" value={formData.instructor} onChange={handleChange} placeholder="Instructor name" />
-              </div>
-              <div>
-                <Label className="font-semibold">Category</Label>
-                <Input name="category" value={formData.category} onChange={handleChange} placeholder="e.g. Marketing" />
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" name="published" checked={formData.published} onChange={handleChange} />
-              <Label className="font-medium">Publish this course</Label>
-            </div>
-
-            {/* Thumbnail Upload */}
-            <div>
-              <Label className="font-semibold mb-2 block">Thumbnail</Label>
-              <div className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-gray-50 transition">
+              <p className="font-semibold mb-2 ">Thumbnail</p>
+              <label 
+                htmlFor="thumbnail-upload" 
+                className="w-[30%] border-2 border-dashed rounded-lg p-1 md:p-4 text-center hover:bg-gray-50 transition cursor-pointer block"
+              >
                 {!previewURL ? (
                   <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
                     <UploadCloud size={32} />
@@ -128,27 +94,54 @@ export default function CreateCoursePage() {
                   <img
                     src={previewURL}
                     alt="Thumbnail Preview"
-                    className="w-full h-48 object-cover rounded-lg"
+                    className="w-full aspect-square overflow-hidden rounded-md "
                   />
                 )}
-                <Input type="file" accept="image/*" onChange={handleThumbnailChange} className="mt-2" />
+              </label>
+              <Input
+                id="thumbnail-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailChange}
+                className="hidden"
+              />
+            </div>
+
+
+            {/* Text Fields */}
+            <div>
+              <Label className="font-semibold">Title</Label>
+              <Input name="title" value={formData.title} onChange={handleChange} placeholder="Enter course title" className="p-2 my-2 w-full" />
+            </div>
+
+            <div>
+              <Label className="font-semibold mb-3">Description</Label>
+              <Textarea name="description" value={formData.description} onChange={handleChange} placeholder="Course description..." />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label className="font-semibold">Price</Label>
+                <Input name="price" type="number" value={formData.price} onChange={handleChange} placeholder="₹999" className="p-2 my-2" />
+              </div>
+              <div>
+                <Label className="font-semibold">Instructor</Label>
+                <Input name="instructor" value={formData.instructor} onChange={handleChange} placeholder="Instructor name" className="p-2 my-2"  />
+              </div>
+              <div>
+                <Label className="font-semibold">Category</Label>
+                <Input name="category" value={formData.category} onChange={handleChange} placeholder="e.g. Marketing" className="p-2 my-2"  />
               </div>
             </div>
 
-            {/* ✅ Video Upload Section */}
-            <div>
-              <Label className="font-semibold mb-2 block">Course Video</Label>
-              <div className="border-2 border-dashed rounded-lg p-6 text-center hover:bg-gray-50 transition">
-                <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
-                  <Video size={32} />
-                  <p>Upload video file (MP4)</p>
-                </div>
-                <Input type="file" accept="video/mp4" onChange={handleVideoChange} className="mt-2" />
-                {video && (
-                  <p className="text-sm text-gray-600 mt-2">Selected Video: {video.name}</p>
-                )}
-              </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" name="published" checked={formData.published} onChange={handleChange} />
+              <Label className="font-medium">Publish this course</Label>
             </div>
+
+            {/* Thumbnail Upload */}
+           
+            
 
             <Button
               type="submit"
@@ -158,8 +151,8 @@ export default function CreateCoursePage() {
               <Rocket size={18} /> Create Course
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

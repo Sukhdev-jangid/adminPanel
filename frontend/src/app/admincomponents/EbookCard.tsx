@@ -1,6 +1,5 @@
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, ExternalLink, User, BookOpen } from 'lucide-react';
 import Image from 'next/image';
