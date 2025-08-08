@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,9 +8,26 @@ import { Button } from "@/components/ui/button";
 import axios from "../../../utils/axios";
 import { UploadCloud, Rocket, Video, PlusSquare, Edit } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  instructor:string;
+  category:string;
+  thumbnail?: string;
+}
 
 export default function CreateCoursePage() {
+
+  const {id} = useParams();
+  const [course, setCourse] = useState<Course | null>(null);
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [previewURL, setPreviewURL] = useState<string | null>(null);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -20,11 +37,42 @@ export default function CreateCoursePage() {
     published: false,
   });
 
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
- 
-  const [previewURL, setPreviewURL] = useState<string | null>(null);
-  const router = useRouter();
+   useEffect(() => {
+    if (!id) return;
 
+    const fetchCourse = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}course/getCourse/${id}`
+        );
+        setCourse(res.data);
+        setFormData({
+        title: res.data.title || "",
+        description: res.data.description || "",
+        price: res.data.price?.toString() || "",
+        instructor: res.data.instructor || "",
+        category: res.data.category || "",
+        published: res.data.published || false,
+      });
+
+      
+      if (res.data.thumbnail) {
+      const imgUrl = res.data.thumbnail.startsWith("http")
+      ? res.data.thumbnail
+      : `http://localhost:5000/${res.data.thumbnail}`;
+      setPreviewURL(imgUrl);
+      }
+      } catch (err: any) {
+        console.log(err.message)
+      } 
+    };
+
+    fetchCourse();
+  }, [id]);
+
+  console.log(course)
+
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.target as HTMLInputElement;
     const { name, value, type } = target;
@@ -43,8 +91,6 @@ export default function CreateCoursePage() {
     }
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,9 +105,9 @@ export default function CreateCoursePage() {
 
 
     try {
-      const res = await axios.post(`/course/create`, data);
+      const res = await axios.put(`/course/updateCourse/${id}`, data);
       console.log(res.data);
-      toast.success('Course created successfully! Redirecting...');
+      toast.success('Course update successfully! Redirecting...');
 
       setTimeout(() => {
         router.push("/admin/courses");
@@ -138,17 +184,12 @@ export default function CreateCoursePage() {
               <input type="checkbox" name="published" checked={formData.published} onChange={handleChange} />
               <Label className="font-medium">Publish this course</Label>
             </div>
-
-            {/* Thumbnail Upload */}
-           
-            
-
             <Button
               type="submit"
               variant={"blue"}
               size={"full"}
             >
-              <Rocket size={18} /> Create Course
+              <Rocket size={18} /> Update Course
             </Button>
           </form>
         </div>
